@@ -140,7 +140,7 @@ let hider_canvas = (function()
     {
         if ( points.length < 5 ) return;
         let arr = [];
-        let g = 5;
+        let g = 1;
 
         ctx.strokeStyle = "red";
         ctx.lineWidth = 3;
@@ -159,8 +159,15 @@ let hider_canvas = (function()
                 {x: tmp[3].x - tmp[1].x, y: tmp[3].y - tmp[1].y },
                 {x: tmp[4].x - tmp[2].x, y: tmp[4].y - tmp[2].y }
             ];
-            let dif = {x: (seg[0].x + seg[2].x)/2.0 - seg[1].x, y: (seg[0].y + seg[2].y)/2.0 - seg[1].y} 
-            let thre = dif.x*dif.x + dif.y*dif.y;
+            let v1 = {x: (seg[0].x + seg[2].x), y: (seg[0].y + seg[2].y) };
+            let d1 = Math.sqrt(v1.x * v1.x + v1.y * v1.y);
+            let tmp1 = {x: v1.x / d1, y: v1.y / d1 };
+
+            let d2 = Math.sqrt(seg[1].x * seg[1].x + seg[1].y * seg[1].y);
+            let tmp2 = {x: seg[1].x / d2, y: seg[1].y / d2 };
+
+            let dif = {x: tmp1.x - tmp2.x, y: tmp1.y - tmp2.y };
+            let thre = (dif.x*dif.x + dif.y*dif.y);
             dif.thre = thre;
             arr.push( dif );
             if ( i == 0 ){
@@ -168,11 +175,11 @@ let hider_canvas = (function()
             }else{
                 if ( thre == 0 ){
                     ctx.strokeStyle = "white";
-                } else if ( thre < 0.25 ){
+                } else if ( thre < 0.2 ){
                     ctx.strokeStyle = "blue";
                 } else if ( thre < 0.5 ){
                     ctx.strokeStyle = "green";
-                } else if ( thre < 0.75 ){
+                } else if ( thre < 0.7 ){
                     ctx.strokeStyle = "yellow";
                 } else{
                     ctx.strokeStyle = "red";
